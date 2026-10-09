@@ -1,0 +1,67 @@
+# ResearchFlow — full stack (MongoDB + FastAPI + React)
+#
+#   docker compose up --build
+#
+#   web  → http://localhost:5173   (VITE_API_URL baked in below → full API mode)
+#   api  → http://localhost:8000   (docs at /docs, health at /api/health)
+#
+# Copy .env.example → .env and adjust secrets before running.
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mongodb://mongo:27017/researchflow
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me-in-production}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      APP_URL: ${APP_URL:-http://localhost:5173}
+      OTP_DEBUG: ${OTP_DEBUG:-true}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      AI_PROVIDER: ${AI_PROVIDER:-ollama}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      AI_MODEL: ${AI_MODEL:-qwen3:4b}
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      STORAGE_DIR: /app/storage
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-researchflow}
+    volumes:
+      - api_storage:/app/storage
+    ports:
+      - "8000:8000"
+
+  web:
+    image: node:20
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      VITE_API_URL: http://localhost:8000
+    volumes:
+      - ../frontend:/app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  mongo_data:
+  api_storage:

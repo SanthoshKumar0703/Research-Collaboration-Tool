@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── ResearchFlow design tokens ─────────────────────────────── */
+:root {
+  --c-paper: 250 247 241;
+  --c-paper-soft: 244 238 229;
+  --c-card: 255 255 255;
+  --c-card-2: 251 248 243;
+  --c-line: 232 224 211;
+  --c-line-2: 208 197 181;
+  --c-ink: 34 29 26;
+  --c-ink-2: 94 86 77;
+  --c-faint: 141 132 121;
+  --c-wine: 122 41 55;
+  --c-wine-deep: 97 30 43;
+  --c-wine-soft: 242 226 228;
+  --c-copper: 178 103 58;
+  --c-copper-soft: 246 232 220;
+  --c-gold: 186 149 74;
+  --c-gold-soft: 245 237 219;
+  --c-moss: 79 124 91;
+  --c-amber: 181 131 44;
+  --c-rust: 169 59 43;
+  --c-on-accent: 248 243 233;
+  --shadow-soft: 0 1px 2px rgb(34 29 26 / 0.04), 0 10px 30px -14px rgb(34 29 26 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(34 29 26 / 0.05), 0 20px 44px -18px rgb(34 29 26 / 0.22);
+}
+.dark {
+  /* ── ResearchFlow dark — deep navy / AI-SaaS accent system ──────────── */
+  --c-paper: 7 11 24;         /* #070B18 page background */
+  --c-paper-soft: 13 20 38;   /* #0D1426 surface (sidebar, subtle panels) */
+  --c-card: 17 26 48;         /* #111A30 card */
+  --c-card-2: 24 35 61;       /* raised/hover card */
+  --c-line: 30 42 70;
+  --c-line-2: 46 62 98;
+  --c-ink: 245 247 255;       /* #F5F7FF primary text */
+  --c-ink-2: 148 163 199;     /* #94A3C7 secondary text */
+  --c-faint: 100 113 145;
+  --c-wine: 79 124 255;       /* #4F7CFF primary */
+  --c-wine-deep: 61 100 224;
+  --c-wine-soft: 26 38 74;
+  --c-copper: 124 92 255;     /* #7C5CFF secondary */
+  --c-copper-soft: 33 27 66;
+  --c-gold: 56 217 255;       /* #38D9FF accent — used sparingly for AI/data highlights */
+  --c-gold-soft: 15 42 54;
+  --c-moss: 74 222 149;
+  --c-amber: 245 187 71;
+  --c-rust: 248 113 113;
+  --c-on-accent: 245 247 255;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 30px -14px rgb(3 8 20 / 0.65);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.55), 0 20px 44px -18px rgb(3 8 20 / 0.75);
+  --shadow-glow: 0 0 1px rgb(79 124 255 / 0.4), 0 16px 48px -12px rgb(79 124 255 / 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+  }
+  ::selection {
+    background: rgb(var(--c-wine) / 0.18);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--c-line-2)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-line-2));
+    border-radius: 8px;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-wine) / 0.6);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-line bg-card px-3.5 py-2.5 text-sm text-ink placeholder:text-faint transition focus:border-wine focus:outline-none focus:ring-2 focus:ring-wine/15;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-wine px-4 py-2.5 text-sm font-medium text-[rgb(var(--c-on-accent))] shadow-soft transition-all duration-200 hover:bg-wine-deep disabled:pointer-events-none disabled:opacity-50 dark:shadow-glow;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line-2 px-4 py-2.5 text-sm font-medium text-ink transition-all duration-200 hover:border-wine/50 hover:text-wine disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium text-ink-2 transition-all duration-200 hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-soft {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-wine-soft px-4 py-2.5 text-sm font-medium text-wine transition-all duration-200 hover:bg-wine/20 disabled:pointer-events-none disabled:opacity-50;
+  }
+  .card {
+    @apply rounded-xl border border-line bg-card shadow-soft;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-card px-2.5 py-1 text-xs text-ink-2;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-faint;
+  }
+  .hairline-t {
+    border-top: 1px solid rgb(var(--c-line));
+  }
+  .editorial-grid {
+    background-image: linear-gradient(rgb(var(--c-ink) / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--c-ink) / 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  /* Sparingly-used premium accents (dark mode only) — for hero CTAs, key stat
+     cards and the AI surface. Not applied globally; keep this to a handful
+     of elements so the product still reads as professional, not neon. */
+  .dark .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+  .dark .aurora-bg {
+    background-image:
+      radial-gradient(60% 50% at 15% 0%, rgb(var(--c-wine) / 0.16), transparent 60%),
+      radial-gradient(50% 40% at 100% 20%, rgb(var(--c-copper) / 0.14), transparent 60%);
+  }
+  .gradient-text {
+    background-image: linear-gradient(90deg, rgb(var(--c-wine)), rgb(var(--c-copper)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Number inputs, kbd */
+kbd {
+  @apply rounded border border-line bg-card px-1.5 py-0.5 font-mono text-[10px] text-faint;
+}

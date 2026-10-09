@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+
+# backend
+backend/.venv
+backend/storage
+backend/__pycache__
+backend/**/__pycache__
+*.pyc
+
+# editor
+.vscode/*
+!.vscode/extensions.json
